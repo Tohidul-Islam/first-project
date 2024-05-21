@@ -1,3 +1,5 @@
+import { Model } from 'mongoose';
+
 // 1. Create an interface representing a document in MongoDB.
 export type Guardian = {
   fatherName: string;
@@ -10,7 +12,7 @@ export type Guardian = {
 
 export type UserName = {
   firstName: string;
-  middleName: string;
+  middleName?: string;
   lastName: string;
 };
 
@@ -24,7 +26,8 @@ export type localGuardian = {
 export type Student = {
   id: string;
   name: UserName;
-  gender: 'male' | 'female';
+  password: string;
+  gender: 'male' | 'female' | 'other';
   dateOfBirth: string;
   email: string;
   contactNumber: string;
@@ -36,6 +39,20 @@ export type Student = {
   localGuardian: localGuardian;
   profileImg?: string;
   isActive: 'active' | 'blocked';
+  isDeleted: boolean;
 };
 
-// 2. Create a Schema corresponding to the document interface.
+// // custom instance method
+// export type StudentMethods = {
+//   isUserExist(id: string): Promise<Student | null>;
+// };
+
+// export type TheStudentModel = Model<
+//   Student,
+//   Record<string, never>,
+//   StudentMethods
+// >;
+// custom static method
+export interface TheStudentModel extends Model<Student> {
+  isUserExist(id: string): Promise<Student | null>;
+}
